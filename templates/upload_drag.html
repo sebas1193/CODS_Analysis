@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir Archivo (Drag & Drop)</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #6875f5; /* Fondo azul */
+        }
+
+        .drag-area {
+            border: 2px dashed #ccc;
+            background-color: white;
+            width: 400px;
+            height: 250px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: #333;
+            font-size: 18px;
+            padding: 20px;
+            box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .drag-area.active {
+            background-color: #f0f0f0;
+        }
+
+        .drag-area img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 15px;
+        }
+
+        .drag-area button {
+            background-color: #6875f5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .drag-area button:hover {
+            background-color: #5864d3;
+        }
+
+        .drag-area header {
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .drag-area span {
+            margin: 10px 0;
+            font-size: 16px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <form id="uploadForm" action="/process" method="POST" enctype="multipart/form-data">
+        <div class="drag-area" id="dragArea">
+            <img src="https://img.icons8.com/clouds/100/000000/upload.png" alt="upload-icon">
+            <header>Arrastra y suelta para subir un archivo</header>
+            <span>o</span>
+            <button type="button" id="browseFile">Explorar archivo</button>
+            <input type="file" id="fileInput" name="file" hidden>
+        </div>
+    </form>
+
+    <script>
+        const dragArea = document.getElementById('dragArea');
+        const fileInput = document.getElementById('fileInput');
+        const browseFile = document.getElementById('browseFile');
+        const uploadForm = document.getElementById('uploadForm');
+        let selectedFile;
+
+        // Si el usuario hace clic en el botón para explorar archivos
+        browseFile.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Cuando se selecciona un archivo con el explorador de archivos
+        fileInput.addEventListener('change', function () {
+            selectedFile = this.files[0];
+            dragArea.classList.add('active');
+            dragArea.querySelector('header').textContent = selectedFile.name;
+            uploadForm.submit();  // Envía automáticamente el formulario cuando se selecciona un archivo
+        });
+
+        // Cuando el archivo es arrastrado dentro del área
+        dragArea.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            dragArea.classList.add('active');
+        });
+
+        // Cuando el archivo es arrastrado fuera del área
+        dragArea.addEventListener('dragleave', () => {
+            dragArea.classList.remove('active');
+        });
+
+        // Cuando se suelta el archivo en el área
+        dragArea.addEventListener('drop', (event) => {
+            event.preventDefault();
+            selectedFile = event.dataTransfer.files[0];
+            fileInput.files = event.dataTransfer.files;
+            dragArea.classList.add('active');
+            dragArea.querySelector('header').textContent = selectedFile.name;
+            uploadForm.submit();  // Envía automáticamente el formulario cuando se suelta el archivo
+        });
+    </script>
+</body>
+</html>

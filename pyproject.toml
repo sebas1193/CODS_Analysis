@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "drag-files-to-upload-main"
+version = "0.1.0"
+description = ""
+authors = ["sebas1193 <juansebasitan05@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+flask = "^3.0.3"
+numpy = "^2.1.2"
+pandas = "^2.2.3"
+matplotlib = "^3.9.2"
+openpyxl = "^3.1.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
